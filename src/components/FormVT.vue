@@ -40,10 +40,16 @@
 
 <script>
 export default {
+  props: {
+    city: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      currentQuestion: 0, // Index de la question actuelle
-      answers: [], // Réponses collectées
+      currentQuestion: 0,
+      answers: [],
       questions: [
         {
           title: "Quel est votre pays de résidence ?",
@@ -57,26 +63,29 @@ export default {
     };
   },
   methods: {
-    // Gérer la réponse de l'utilisateur
     handleAnswer(option) {
-      this.answers[this.currentQuestion] = option; // Met à jour ou ajoute la réponse
+      this.answers[this.currentQuestion] = option;
       if (this.currentQuestion < this.questions.length - 1) {
         this.currentQuestion++;
       }
     },
-    // Revenir à la question précédente
     goBack() {
       if (this.currentQuestion > 0) {
         this.currentQuestion--;
       }
     },
-    // Soumettre les réponses
     submitAnswers() {
-      console.log("Réponses collectées :", this.answers);
+      const data = {
+        answers: this.answers,
+        city: this.city, // Ajoute la ville aux données
+      };
+
+      console.log("Données envoyées :", data);
+
       fetch("/api/submit.js", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(this.answers),
+        body: JSON.stringify(data),
       })
         .then((res) => {
           if (res.ok) {

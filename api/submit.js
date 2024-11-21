@@ -2,7 +2,7 @@ import { google } from 'googleapis';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { body } = req;
+    const { answers, city } = req.body;
 
     try {
       // Vérification et log des variables d'environnement
@@ -30,9 +30,10 @@ export default async function handler(req, res) {
         spreadsheetId,
         range: 'test!A1', // Remplace 'test' par le nom de ta feuille
         valueInputOption: 'USER_ENTERED',
-        requestBody: { values: [body] },
+        requestBody: {
+          values: [[...answers, city]], // Ajoute la ville en dernière colonne
+        },
       });
-
       res.status(200).send('Données ajoutées avec succès');
     } catch (error) {
       console.error('Erreur lors de l’envoi des données :', error);

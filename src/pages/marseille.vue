@@ -1,5 +1,5 @@
 <template>
-  <FormVT />
+  <FormVT :city="'Marseille'" />
 </template>
 
 <script>
